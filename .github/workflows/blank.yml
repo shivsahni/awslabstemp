@@ -1,0 +1,25 @@
+name: Print AWS Temporary Credentials
+
+on:
+  workflow_dispatch:     # Allows manual triggering
+
+permissions:
+  id-token: write       # Required for OIDC token
+  contents: read        # Default read permission
+
+jobs:
+  get-creds:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::481008523238:role/whitebox-lab-2-github-actions-role
+          aws-region: us-east-1
+
+      - name: Print AWS Credentials
+        run: |
+          echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
+          echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
+          echo "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN"
